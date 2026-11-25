@@ -1,487 +1,5 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#090b12">
-<title>NOVA AI V3</title>
-
-<style>
-:root {
-  --bg:#090b12;
-  --sidebar:#0e111b;
-  --panel:#151927;
-  --border:#272c3c;
-  --text:#f5f5fa;
-  --muted:#969caf;
-  --accent:#9177ff;
-}
-
-* {
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-body {
-  height:100dvh;
-  display:flex;
-  overflow:hidden;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,Arial,sans-serif;
-}
-
-/* SIDEBAR */
-
-.sidebar {
-  width:270px;
-  flex-shrink:0;
-  background:var(--sidebar);
-  border-right:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  padding:20px 15px;
-  transition:.25s;
-}
-
-.brand {
-  font-size:25px;
-  font-weight:800;
-  letter-spacing:2px;
-  padding:5px 10px 25px;
-}
-
-.brand span {
-  color:var(--accent);
-}
-
-.newchat {
-  background:var(--panel);
-  border:1px solid var(--border);
-  color:white;
-  padding:13px;
-  border-radius:12px;
-  text-align:left;
-  cursor:pointer;
-  font-size:14px;
-}
-
-.newchat:hover,.history-item:hover {
-  background:#252a3b;
-}
-
-.side-title {
-  color:var(--muted);
-  font-size:11px;
-  margin:28px 8px 12px;
-  letter-spacing:1.5px;
-}
-
-.history-list {
-  overflow-y:auto;
-}
-
-.history-item {
-  padding:11px;
-  font-size:13px;
-  color:#c6cad7;
-  border-radius:9px;
-  cursor:pointer;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
-.history-item.active {
-  background:#202438;
-}
-
-.side-bottom {
-  margin-top:auto;
-  border-top:1px solid var(--border);
-  padding:16px 8px 5px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:2;
-}
-
-/* MAIN */
-
-.main {
-  flex:1;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-}
-
-.topbar {
-  height:65px;
-  padding:0 22px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid var(--border);
-}
-
-.top-title {
-  font-weight:700;
-  font-size:15px;
-}
-
-.version {
-  color:#bbaaff;
-  background:#211b39;
-  padding:7px 12px;
-  border-radius:20px;
-  font-size:11px;
-}
-
-.menu {
-  display:none;
-  background:none;
-  border:none;
-  color:white;
-  font-size:24px;
-  cursor:pointer;
-}
-
-/* CHAT */
-
-.chat {
-  flex:1;
-  overflow-y:auto;
-  padding:30px 18px;
-  scroll-behavior:smooth;
-}
-
-.welcome {
-  max-width:720px;
-  margin:9vh auto 0;
-  text-align:center;
-}
-
-.logo {
-  width:72px;
-  height:72px;
-  margin:auto auto 22px;
-  border-radius:24px;
-  display:grid;
-  place-items:center;
-  font-size:34px;
-  font-weight:900;
-  background:linear-gradient(135deg,#ad91ff,#5135b6);
-  box-shadow:0 8px 40px #7755ff44;
-}
-
-.welcome h1 {
-  font-size:34px;
-  margin-bottom:12px;
-}
-
-.welcome p {
-  color:var(--muted);
-  font-size:14px;
-}
-
-.suggestions {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:13px;
-  margin-top:38px;
-  text-align:left;
-}
-
-.suggestion {
-  padding:18px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:var(--panel);
-  color:white;
-  text-align:left;
-  cursor:pointer;
-  line-height:1.6;
-  font-size:13px;
-}
-
-.suggestion:hover {
-  border-color:var(--accent);
-  transform:translateY(-2px);
-}
-
-.suggestion span {
-  display:block;
-  color:var(--muted);
-  font-size:12px;
-}
-
-/* MESSAGES */
-
-.messages {
-  max-width:780px;
-  margin:auto;
-  display:flex;
-  flex-direction:column;
-  gap:25px;
-}
-
-.message {
-  display:flex;
-  gap:13px;
-  align-items:flex-start;
-  line-height:1.7;
-  font-size:14px;
-}
-
-.avatar {
-  width:34px;
-  height:34px;
-  flex-shrink:0;
-  border-radius:11px;
-  background:#30244d;
-  color:#c9baff;
-  display:grid;
-  place-items:center;
-  font-weight:bold;
-}
-
-.user .avatar {
-  background:#24354b;
-  color:#b6dcff;
-}
-
-.message-content {
-  padding-top:4px;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-}
-
-.typing {
-  color:var(--muted);
-  font-size:13px;
-}
-
-/* INPUT */
-
-.composer-area {
-  padding:14px 18px 20px;
-}
-
-.composer {
-  max-width:780px;
-  margin:auto;
-  background:var(--panel);
-  border:1px solid #363c50;
-  border-radius:18px;
-  padding:10px;
-  display:flex;
-  align-items:flex-end;
-  gap:10px;
-}
-
-.composer:focus-within {
-  border-color:var(--accent);
-}
-
-.composer textarea {
-  flex:1;
-  min-width:0;
-  max-height:140px;
-  min-height:40px;
-  resize:none;
-  background:transparent;
-  border:0;
-  outline:0;
-  color:white;
-  padding:11px;
-  font:14px Arial,sans-serif;
-}
-
-.send {
-  width:43px;
-  height:43px;
-  flex-shrink:0;
-  border:none;
-  border-radius:12px;
-  background:var(--accent);
-  color:white;
-  font-size:22px;
-  cursor:pointer;
-}
-
-.send:hover {
-  background:#aa96ff;
-}
-
-.send:disabled {
-  opacity:.5;
-  cursor:not-allowed;
-}
-
-.footer {
-  text-align:center;
-  font-size:10px;
-  color:#777e91;
-  margin-top:11px;
-}
-
-/* MOBILE */
-
-@media(max-width:650px) {
-  .sidebar {
-    position:fixed;
-    z-index:10;
-    top:0;
-    bottom:0;
-    left:-280px;
-    width:270px;
-    box-shadow:none;
-  }
-
-  .sidebar.open {
-    left:0;
-    box-shadow:10px 0 40px #0009;
-  }
-
-  .menu {
-    display:block;
-  }
-
-  .topbar {
-    padding:0 15px;
-  }
-
-  .welcome {
-    margin-top:7vh;
-  }
-
-  .welcome h1 {
-    font-size:27px;
-  }
-
-  .suggestions {
-    grid-template-columns:1fr;
-    margin-top:25px;
-  }
-
-  .chat {
-    padding:20px 14px;
-  }
-
-  .composer-area {
-    padding:10px 12px 15px;
-  }
-}
-</style>
-</head>
-
-<body>
-
-<aside class="sidebar" id="sidebar">
-
-  <div class="brand">NOVA<span> AI</span></div>
-
-  <button class="newchat" onclick="newChat()">
-    ＋ &nbsp; New chat
-  </button>
-
-  <div class="side-title">RECENT CHATS</div>
-
-  <div class="history-list" id="historyList"></div>
-
-  <div class="side-bottom">
-    ✦ NOVA AI
-    <br>
-    Version 3.1
-    <br>
-    Built for creativity.
-  </div>
-
-</aside>
-
-<main class="main">
-
-  <header class="topbar">
-
-    <div style="display:flex;align-items:center;gap:14px">
-      <button class="menu" onclick="toggleMenu()">☰</button>
-      <div class="top-title">NOVA AI</div>
-    </div>
-
-    <div class="version">V3.1</div>
-
-  </header>
-
-  <section class="chat" id="chat">
-
-    <div class="welcome" id="welcome">
-
-      <div class="logo">N</div>
-
-      <h1>Welcome to NOVA AI</h1>
-
-      <p>Your ideas. Your questions. One intelligent space.</p>
-
-      <div class="suggestions">
-
-        <button class="suggestion"
-          onclick="ask('Give me creative business ideas')">
-          ✦ Creative ideas
-          <span>Discover something new</span>
-        </button>
-
-        <button class="suggestion"
-          onclick="ask('Explain artificial intelligence simply')">
-          ◈ Learn something
-          <span>Understand complex topics</span>
-        </button>
-
-        <button class="suggestion"
-          onclick="ask('Help me write a story')">
-          ✎ Write a story
-          <span>Bring your imagination to life</span>
-        </button>
-
-        <button class="suggestion"
-          onclick="ask('Give me a coding project idea')">
-          ⌘ Coding projects
-          <span>Explore new technology</span>
-        </button>
-
-      </div>
-    </div>
-
-    <div class="messages" id="messages"></div>
-
-  </section>
-
-  <div class="composer-area">
-
-    <div class="composer">
-
-      <textarea
-        id="prompt"
-        placeholder="Message NOVA AI..."
-        rows="1"
-      ></textarea>
-
-      <button class="send" id="send" onclick="sendMessage()">
-        ↑
-      </button>
-
-    </div>
-
-    <div class="footer">
-      NOVA AI V3.1 • Frontend preview • AI connection coming later
-    </div>
-
-  </div>
-
-</main>
-
 <script>
-
 const promptBox = document.getElementById("prompt");
 const messages = document.getElementById("messages");
 const welcome = document.getElementById("welcome");
@@ -489,35 +7,115 @@ const chat = document.getElementById("chat");
 const historyList = document.getElementById("historyList");
 const sendButton = document.getElementById("send");
 
+const STORAGE_KEY = "nova_ai_v4_conversations";
+
+/*
+  Keep this empty until your secure backend is deployed.
+  Later, set it to your backend URL, such as:
+  https://your-worker.example.workers.dev/api/chat
+
+  NEVER put an AI API key here.
+*/
+
+const API_ENDPOINT = "";
+
 let conversations = [];
 let currentChat = null;
 let busy = false;
 
 function createChat() {
   return {
-    id: Date.now() + Math.random(),
+    id: Date.now().toString() + Math.random().toString(36).slice(2),
     title: "New chat",
-    messages: []
+    messages: [],
+    updatedAt: Date.now()
   };
 }
+
+// LOAD SAVED CONVERSATIONS
+
+function loadChats() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const parsed = saved ? JSON.parse(saved) : [];
+
+    if (!Array.isArray(parsed)) {
+      conversations = [];
+      return;
+    }
+
+    conversations = parsed.filter(item =>
+      item &&
+      typeof item.id === "string" &&
+      typeof item.title === "string" &&
+      Array.isArray(item.messages)
+    );
+
+  } catch (error) {
+    console.error("Could not load chat history:", error);
+    conversations = [];
+  }
+}
+
+// SAVE CONVERSATIONS
+
+function saveChats() {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(conversations)
+    );
+    return true;
+  } catch (error) {
+    console.error("Could not save chat history:", error);
+    return false;
+  }
+}
+
+// NEW CHAT
 
 function newChat() {
   currentChat = createChat();
   conversations.unshift(currentChat);
+
+  saveChats();
   render();
+
   promptBox.value = "";
+  promptBox.focus();
+
   closeMenu();
 }
 
-function addMessage(text, type) {
-  currentChat.messages.push({text, type});
+// ADD MESSAGE
 
-  if (currentChat.title === "New chat" && type === "user") {
-    currentChat.title = text.slice(0, 28);
+function addMessage(text, type) {
+  currentChat.messages.push({
+    text,
+    type,
+    time: Date.now()
+  });
+
+  if (
+    currentChat.title === "New chat" &&
+    type === "user"
+  ) {
+    currentChat.title = text.slice(0, 35);
   }
 
+  currentChat.updatedAt = Date.now();
+
+  // Put the active conversation first.
+  conversations = [
+    currentChat,
+    ...conversations.filter(c => c.id !== currentChat.id)
+  ];
+
+  saveChats();
   render();
 }
+
+// RENDER CHAT
 
 function render() {
   welcome.style.display =
@@ -531,7 +129,8 @@ function render() {
 
     const avatar = document.createElement("div");
     avatar.className = "avatar";
-    avatar.textContent = msg.type === "user" ? "U" : "N";
+    avatar.textContent =
+      msg.type === "user" ? "U" : "N";
 
     const content = document.createElement("div");
     content.className = "message-content";
@@ -544,31 +143,122 @@ function render() {
   historyList.innerHTML = "";
 
   conversations.forEach(item => {
+    const wrapper = document.createElement("div");
+    wrapper.style.display = "flex";
+    wrapper.style.alignItems = "center";
+    wrapper.style.gap = "5px";
+
     const button = document.createElement("div");
+
     button.className = "history-item" +
       (item.id === currentChat.id ? " active" : "");
 
-    button.textContent = "✦  " + item.title;
+    button.textContent = "✦ " + item.title;
+    button.style.flex = "1";
     button.onclick = () => openChat(item.id);
 
-    historyList.appendChild(button);
+    const remove = document.createElement("button");
+    remove.textContent = "×";
+    remove.title = "Delete conversation";
+    remove.setAttribute(
+      "aria-label",
+      "Delete " + item.title
+    );
+
+    remove.style.cssText =
+      "background:transparent;color:#969caf;" +
+      "border:0;padding:8px;cursor:pointer;font-size:19px;";
+
+    remove.onclick = event => {
+      event.stopPropagation();
+      deleteChat(item.id);
+    };
+
+    wrapper.append(button, remove);
+    historyList.appendChild(wrapper);
   });
 
   chat.scrollTop = chat.scrollHeight;
 }
 
+// OPEN PREVIOUS CHAT
+
 function openChat(id) {
-  currentChat = conversations.find(c => c.id === id);
+  const selected = conversations.find(c => c.id === id);
+
+  if (!selected) return;
+
+  currentChat = selected;
   render();
   closeMenu();
 }
+
+// DELETE CHAT
+
+function deleteChat(id) {
+  const selected = conversations.find(c => c.id === id);
+
+  if (!selected) return;
+
+  if (!confirm("Delete this conversation?")) return;
+
+  conversations = conversations.filter(c => c.id !== id);
+
+  if (currentChat.id === id) {
+    currentChat = conversations[0] || createChat();
+
+    if (!conversations.length) {
+      conversations = [currentChat];
+    }
+  }
+
+  saveChats();
+  render();
+}
+
+// SUGGESTION BUTTONS
 
 function ask(text) {
   promptBox.value = text;
   sendMessage();
 }
 
-function sendMessage() {
+// REAL BACKEND CONNECTION
+
+async function getAIResponse() {
+  if (!API_ENDPOINT) {
+    return "AI is not connected yet. Your message and chat history have been saved successfully. NOVA AI's secure backend will be connected in a future update.";
+  }
+
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      messages: currentChat.messages.map(msg => ({
+        role: msg.type === "user" ? "user" : "assistant",
+        content: msg.text
+      }))
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error("Backend request failed: " + response.status);
+  }
+
+  const data = await response.json();
+
+  if (typeof data.reply !== "string") {
+    throw new Error("Invalid backend response");
+  }
+
+  return data.reply;
+}
+
+// SEND MESSAGE
+
+async function sendMessage() {
   const text = promptBox.value.trim();
 
   if (!text || busy) return;
@@ -588,50 +278,82 @@ function sendMessage() {
 
   const typing = document.createElement("div");
   typing.className = "typing";
-  typing.textContent = "NOVA AI is preparing a preview response...";
+  typing.textContent = "NOVA AI is thinking...";
 
   messages.appendChild(typing);
   chat.scrollTop = chat.scrollHeight;
 
-  setTimeout(() => {
+  try {
+    const answer = await getAIResponse();
+
+    typing.remove();
+    addMessage(answer, "bot");
+
+  } catch (error) {
+    console.error("AI connection error:", error);
 
     typing.remove();
 
     addMessage(
-      "Thanks for your message! NOVA AI V3 is currently running in frontend preview mode. Real AI responses will be available after a secure backend is connected.",
+      "I couldn't connect to the AI server. Your message is saved. Please try again later.",
       "bot"
     );
 
+  } finally {
     busy = false;
     sendButton.disabled = false;
-
-  }, 900);
+    promptBox.focus();
+  }
 }
 
+// MOBILE SIDEBAR
+
 function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sidebar")
+    .classList.toggle("open");
 }
 
 function closeMenu() {
-  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebar")
+    .classList.remove("open");
 }
 
-promptBox.addEventListener("keydown", e => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
+// ENTER TO SEND
+
+promptBox.addEventListener("keydown", event => {
+  if (
+    event.key === "Enter" &&
+    !event.shiftKey
+  ) {
+    event.preventDefault();
     sendMessage();
   }
 });
 
+// AUTO RESIZE INPUT
+
 promptBox.addEventListener("input", () => {
   promptBox.style.height = "40px";
+
   promptBox.style.height =
     Math.min(promptBox.scrollHeight, 140) + "px";
 });
 
-newChat();
+// INITIALIZE APP
+
+loadChats();
+
+if (conversations.length > 0) {
+  conversations.sort(
+    (a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)
+  );
+
+  currentChat = conversations[0];
+} else {
+  currentChat = createChat();
+  conversations.push(currentChat);
+}
+
+render();
 
 </script>
-
-</body>
-</html>
