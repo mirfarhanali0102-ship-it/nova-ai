@@ -101,53 +101,120 @@ body{height:100vh;background:var(--bg);color:var(--text);font-family:Arial,sans-
   </div>
 </main>
 <script>
-const promptBox=document.getElementById("prompt");
-const messages=document.getElementById("messages");
-const welcome=document.getElementById("welcome");
+const promptBox = document.getElementById("prompt");
+const messages = document.getElementById("messages");
+const welcome = document.getElementById("welcome");
 
-function addMessage(text,type){
-  const row=document.createElement("div");
-  row.className="message "+type;
-  const avatar=document.createElement("div");
-  avatar.className="avatar";
-  avatar.textContent=type==="user"?"U":"N";
-  const content=document.createElement("div");
-  content.className="message-content";
-  content.textContent=text;
-  row.append(avatar,content);
+const STORAGE_KEY = "nova_ai_v3_chat_history";
+
+function saveHistory() {
+  const chatData = [];
+
+  document.querySelectorAll("#messages .message").forEach(row => {
+    const content = row.querySelector(".message-content");
+
+    if (content) {
+      chatData.push({
+        text: content.textContent,
+        type: row.classList.contains("user") ? "user" : "bot"
+      });
+    }
+  });
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(chatData));
+  } catch (error) {
+    console.log("Save error:", error);
+  }
+}
+
+function addMessage(text, type, shouldSave = true) {
+  const row = document.createElement("div");
+  row.className = "message " + type;
+
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = type === "user" ? "U" : "N";
+
+  const content = document.createElement("div");
+  content.className = "message-content";
+  content.textContent = text;
+
+  row.append(avatar, content);
   messages.appendChild(row);
-  document.getElementById("chat").scrollTop=999999;
+
+  document.getElementById("chat").scrollTop = 999999;
+
+  if (shouldSave) saveHistory();
 }
 
-function sendMessage(){
-  const text=promptBox.value.trim();
-  if(!text)return;
-  welcome.style.display="none";
-  addMessage(text,"user");
-  promptBox.value="";
-  setTimeout(()=>{
-    addMessage("Thanks for your message! NOVA AI V3 is currently in preview mode. Real AI connection will be added through a secure backend in the next update.","bot");
-  },500);
+function loadHistory() {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || "[]"
+    );
+
+    if (Array.isArray(saved) && saved.length > 0) {
+      welcome.style.display = "none";
+
+      saved.forEach(item => {
+        if (item && typeof item.text === "string") {
+          addMessage(
+            item.text,
+            item.type === "user" ? "user" : "bot",
+            false
+          );
+        }
+      });
+    }
+  } catch (error) {
+    console.log("Load error:", error);
+  }
 }
 
-function ask(text){
-  promptBox.value=text;
+function sendMessage() {
+  const text = promptBox.value.trim();
+  if (!text) return;
+
+  welcome.style.display = "none";
+  addMessage(text, "user");
+  promptBox.value = "";
+
+  setTimeout(() => {
+    addMessage(
+      "Thanks for your message! NOVA AI V3 is currently in preview mode. Real AI connection will be added through a secure backend in the next update.",
+      "bot"
+    );
+  }, 500);
+}
+
+function ask(text) {
+  promptBox.value = text;
   sendMessage();
 }
 
-function newChat(){
-  messages.innerHTML="";
-  welcome.style.display="block";
-  promptBox.value="";
+function newChat() {
+  messages.innerHTML = "";
+  welcome.style.display = "block";
+  promptBox.value = "";
+
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (error) {
+    console.log("Clear error:", error);
+  }
+
   document.getElementById("sidebar").classList.remove("open");
 }
 
-function toggleMenu(){
+function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("open");
 }
 
-promptBox.addEventListener("keydown",e=>{
-  if(e.key==="Enter"&&!e.shiftKey){
+loadHistory();
+
+promptBox.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
   }
