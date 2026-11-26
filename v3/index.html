@@ -1,158 +1,109 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NOVA AI V3</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101116">
+<title>NOVA AI V3.1</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#080a10;--panel:#10131d;--line:#242938;--text:#f4f5fa;--muted:#9299aa;--accent:#8b75ff}
-body{height:100vh;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;display:flex;overflow:hidden}
-.sidebar{width:260px;background:#0d1018;border-right:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:18px}
-.brand{font-size:24px;font-weight:800;letter-spacing:2px;color:#b7a8ff}
-.brand span{color:white}
-.newchat{background:#1b1e2b;border:1px solid #34394c;color:white;padding:13px;border-radius:12px;text-align:left;font-size:14px;cursor:pointer}
-.newchat:hover{background:#292d40}
-.side-label{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:10px}
-.history{font-size:13px;color:#c3c7d3;padding:10px;border-radius:9px}
-.history:hover{background:#191d29}
-.side-bottom{margin-top:auto;color:var(--muted);font-size:12px;line-height:1.7}
-.main{flex:1;display:flex;flex-direction:column;min-width:0}
-.topbar{height:65px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px}
-.top-title{font-weight:700}
-.version{font-size:11px;color:#b6a7ff;background:#211c38;padding:6px 10px;border-radius:20px}
-.chat{flex:1;overflow-y:auto;padding:30px 18px}
-.welcome{max-width:700px;margin:10vh auto 0;text-align:center}
-.logo{width:65px;height:65px;margin:0 auto 20px;border-radius:22px;background:linear-gradient(135deg,#9d83ff,#4934a6);display:grid;place-items:center;font-size:30px;font-weight:bold;box-shadow:0 8px 35px #7055ff44}
-.welcome h1{font-size:34px;margin-bottom:12px}
-.welcome p{color:var(--muted);font-size:14px}
-.suggestions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:35px;text-align:left}
-.suggestion{background:var(--panel);border:1px solid var(--line);padding:16px;border-radius:14px;color:#dce0ec;cursor:pointer;font-size:13px}
-.suggestion:hover{border-color:var(--accent)}
-.messages{max-width:760px;margin:auto;display:flex;flex-direction:column;gap:22px}
-.message{display:flex;gap:12px;align-items:flex-start;line-height:1.65;font-size:14px}
-.avatar{flex-shrink:0;width:32px;height:32px;border-radius:10px;background:#29213f;display:grid;place-items:center;font-weight:bold;color:#c2b4ff}
-.user .avatar{background:#202b3b;color:#a9d6ff}
-.message-content{padding-top:5px;white-space:pre-wrap;overflow-wrap:anywhere}
-.notice{font-size:11px;color:#8e94a5;text-align:center;margin-top:24px}
-.composer-area{padding:15px 18px 20px}
-.composer{max-width:760px;margin:auto;background:#151925;border:1px solid #34394b;border-radius:17px;padding:10px;display:flex;align-items:flex-end;gap:10px}
-.composer textarea{flex:1;resize:none;max-height:130px;min-height:38px;background:transparent;border:0;outline:0;color:white;padding:10px;font-size:14px;font-family:inherit}
-.send{width:42px;height:42px;border:0;border-radius:12px;background:var(--accent);color:white;font-size:20px;cursor:pointer}
-.send:hover{background:#a08eff}
-.footer{text-align:center;font-size:10px;color:#737b8e;margin-top:10px}
-.menu{display:none;background:none;border:0;color:white;font-size:23px}
-@media(max-width:650px){
-.sidebar{position:absolute;z-index:5;left:-270px;top:0;bottom:0;transition:.25s}
-.sidebar.open{left:0}
-.menu{display:block}
-.welcome{margin-top:8vh}
-.welcome h1{font-size:27px}
-.suggestions{grid-template-columns:1fr}
-.chat{padding:20px 14px}
-.topbar{padding:0 14px}
-}
+*{box-sizing:border-box}body{margin:0;background:#101116;color:#f4f4f5;font:15px Arial,sans-serif}
+.app{display:flex;height:100dvh;overflow:hidden}.sidebar{width:270px;background:#17181f;padding:14px;display:flex;flex-direction:column;gap:12px}
+.brand{font-size:20px;font-weight:700;padding:8px}.new{border:1px solid #454652;background:transparent;color:#fff;border-radius:10px;padding:12px;text-align:left;font-size:15px}
+.history{overflow:auto;display:flex;flex-direction:column;gap:6px}.history button{background:transparent;border:0;color:#ddd;text-align:left;padding:10px;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.history button.active,.history button:hover{background:#30313a}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}.top{padding:16px 20px;border-bottom:1px solid #292a32;font-weight:700}.messages{flex:1;overflow:auto;padding:24px 16px}.welcome{max-width:720px;margin:9vh auto 0;text-align:center}.welcome h1{font-size:30px}.welcome p{color:#aaa}.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}.chips span{border:1px solid #393a44;padding:10px 12px;border-radius:20px;color:#ccc}
+.message{max-width:760px;margin:0 auto 18px;line-height:1.55;white-space:pre-wrap}.message .who{font-size:12px;color:#a5a5b0;margin-bottom:5px}.message.user{background:#242630;padding:14px;border-radius:14px}
+.composer{padding:14px 16px 22px}.form{max-width:760px;margin:auto;display:flex;gap:8px;background:#242630;border:1px solid #41424c;border-radius:16px;padding:8px}.form textarea{flex:1;resize:none;max-height:140px;min-height:42px;background:transparent;border:0;outline:0;color:#fff;padding:12px;font:15px Arial}.form button{border:0;border-radius:12px;background:#f4f4f5;color:#111;padding:0 16px;font-weight:700}.note{text-align:center;color:#858590;font-size:11px;margin-top:10px}
+@media(max-width:650px){.sidebar{width:210px;padding:9px}.messages{padding:18px 10px}.top{padding:14px}.welcome h1{font-size:25px}}
 </style>
 </head>
 <body>
-<aside class="sidebar" id="sidebar">
-  <div class="brand">NOVA<span> AI</span></div>
-  <button class="newchat" onclick="newChat()">＋ &nbsp; New chat</button>
-  <div class="side-label">YOUR ASSISTANT</div>
-  <div class="history">✦ &nbsp; NOVA AI V3</div>
-  <div class="side-bottom">
-    <div>✦ NOVA AI</div>
-    <div>Version 3.0 • Preview</div>
-    <div>Built for creativity.</div>
-  </div>
+<div class="app">
+<aside class="sidebar">
+<div class="brand">✦ NOVA AI</div>
+<button class="new" id="newChat">＋ New chat</button>
+<div style="color:#92939d;font-size:12px;padding:5px 8px">Recent chats</div>
+<div class="history" id="history"></div>
 </aside>
-
 <main class="main">
-  <header class="topbar">
-    <div style="display:flex;align-items:center;gap:13px">
-      <button class="menu" onclick="toggleMenu()">☰</button>
-      <div class="top-title">NOVA AI</div>
-    </div>
-    <div class="version">V3 PREVIEW</div>
-  </header>
-
-  <section class="chat" id="chat">
-    <div class="welcome" id="welcome">
-      <div class="logo">N</div>
-      <h1>Welcome to NOVA AI</h1>
-      <p>Your ideas. Your questions. One intelligent space.</p>
-      <div class="suggestions">
-        <button class="suggestion" onclick="ask('Give me creative business ideas')">✦ &nbsp; Creative business ideas</button>
-        <button class="suggestion" onclick="ask('Explain artificial intelligence simply')">◈ &nbsp; Explain AI simply</button>
-        <button class="suggestion" onclick="ask('Help me write a story')">✎ &nbsp; Write a story</button>
-        <button class="suggestion" onclick="ask('Give me a coding project idea')">⌘ &nbsp; Coding project ideas</button>
-      </div>
-    </div>
-    <div class="messages" id="messages"></div>
-  </section>
-
-  <div class="composer-area">
-    <div class="composer">
-      <textarea id="prompt" placeholder="Message NOVA AI..." rows="1"></textarea>
-      <button class="send" onclick="sendMessage()">↑</button>
-    </div>
-    <div class="footer">NOVA AI V3 • Preview mode — responses are currently simulated.</div>
-  </div>
+<div class="top">NOVA AI <span style="color:#999;font-weight:400">· V3.1 Preview</span></div>
+<section class="messages" id="messages">
+<div class="welcome" id="welcome"><h1>How can I help you?</h1><p>Start a conversation with NOVA AI.</p><div class="chips"><span>Explain a topic</span><span>Write something</span><span>Help with ideas</span></div></div>
+</section>
+<div class="composer">
+<form class="form" id="form"><textarea id="prompt" rows="1" placeholder="Message NOVA AI..." required></textarea><button type="submit">Send</button></form>
+<div class="note">NOVA AI V3.1 Preview · Demo responses only</div>
+</div>
 </main>
-
+</div>
 <script>
-const promptBox=document.getElementById("prompt");
-const messages=document.getElementById("messages");
-const welcome=document.getElementById("welcome");
-
-function addMessage(text,type){
-  const row=document.createElement("div");
-  row.className="message "+type;
-  const avatar=document.createElement("div");
-  avatar.className="avatar";
-  avatar.textContent=type==="user"?"U":"N";
-  const content=document.createElement("div");
-  content.className="message-content";
-  content.textContent=text;
-  row.append(avatar,content);
-  messages.appendChild(row);
-  document.getElementById("chat").scrollTop=999999;
+(() => {
+const KEY = "nova_ai_v3_multi_chats";
+const $ = id => document.getElementById(id);
+let chats = [];
+let activeId = null;
+const makeId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+function load(){
+  try { const data = JSON.parse(localStorage.getItem(KEY) || "[]"); chats = Array.isArray(data) ? data : []; }
+  catch { chats = []; }
+  chats = chats.filter(c => c && c.id && Array.isArray(c.messages));
+  if(chats.length){ activeId = chats[0].id; }
+  else { createChat(); }
 }
-
-function sendMessage(){
-  const text=promptBox.value.trim();
-  if(!text)return;
-  welcome.style.display="none";
-  addMessage(text,"user");
-  promptBox.value="";
-  setTimeout(()=>{
-    addMessage("Thanks for your message! NOVA AI V3 is currently in preview mode. Real AI connection will be added through a secure backend in the next update.","bot");
-  },500);
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(chats)); } catch(e) { console.warn("Could not save chat history",e); } }
+function current(){ return chats.find(c => c.id === activeId); }
+function createChat(){
+  const chat = {id:makeId(), title:"New chat", messages:[], updated:Date.now()};
+  chats.unshift(chat); activeId = chat.id; save(); render();
 }
-
-function ask(text){
-  promptBox.value=text;
-  sendMessage();
+function renderHistory(){
+  const host = $("history"); host.innerHTML = "";
+  chats.slice().sort((a,b)=>(b.updated||0)-(a.updated||0)).forEach(chat=>{
+    const b = document.createElement("button");
+    b.textContent = chat.title || "New chat";
+    b.className = chat.id === activeId ? "active" : "";
+    b.addEventListener("click",()=>{activeId=chat.id;render();});
+    host.appendChild(b);
+  });
 }
-
-function newChat(){
-  messages.innerHTML="";
-  welcome.style.display="block";
-  promptBox.value="";
-  document.getElementById("sidebar").classList.remove("open");
-}
-
-function toggleMenu(){
-  document.getElementById("sidebar").classList.toggle("open");
-}
-
-promptBox.addEventListener("keydown",e=>{
-  if(e.key==="Enter"&&!e.shiftKey){
-    e.preventDefault();
-    sendMessage();
+function renderMessages(){
+  const host = $("messages"); host.innerHTML = "";
+  const chat = current();
+  if(!chat || !chat.messages.length){
+    const welcome=document.createElement("div"); welcome.className="welcome";
+    welcome.innerHTML="<h1>How can I help you?</h1><p>Start a conversation with NOVA AI.</p><div class='chips'><span>Explain a topic</span><span>Write something</span><span>Help with ideas</span></div>";
+    host.appendChild(welcome); return;
   }
+  chat.messages.forEach(m=>{
+    const wrap=document.createElement("div"); wrap.className="message"+(m.role==="user"?" user":"");
+    const who=document.createElement("div"); who.className="who"; who.textContent=m.role==="user"?"You":"NOVA AI";
+    const body=document.createElement("div"); body.textContent=m.text;
+    wrap.append(who,body); host.appendChild(wrap);
+  });
+  host.scrollTop=host.scrollHeight;
+}
+function render(){renderHistory();renderMessages();}
+function demoAnswer(text){
+  const q=text.toLowerCase();
+  if(q.includes("hello")||q.includes("hi")) return "Hello! I’m NOVA AI. This is the preview version, so my replies are demo responses for now.";
+  if(q.includes("image")||q.includes("logo")||q.includes("draw")) return "I can help you plan an image prompt. Live image generation is not connected in this preview yet.";
+  return "Thanks for your message! NOVA AI V3.1 is currently in preview mode. Real AI connection will be added through a secure backend in a future update.";
+}
+$("newChat").addEventListener("click",createChat);
+$("form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const text=$("prompt").value.trim(); if(!text) return;
+  if(!current()) createChat();
+  const chat=current();
+  chat.messages.push({role:"user",text});
+  if(chat.title==="New chat") chat.title=text.slice(0,32)+(text.length>32?"…":"");
+  chat.messages.push({role:"assistant",text:demoAnswer(text)});
+  chat.updated=Date.now(); save(); $("prompt").value=""; render();
 });
+$("prompt").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("form").requestSubmit();}
+});
+load(); render();
+})();
 </script>
 </body>
 </html>
