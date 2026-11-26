@@ -1,18 +1,295 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#212121"><title>NOVA AI</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#212121">
+<title>NOVA AI V3.1</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#212121;color:#f5f5f5;font:15px system-ui,Arial;height:100dvh;overflow:hidden}.app{display:flex;height:100%}.side{width:255px;background:#171717;padding:15px;display:flex;flex-direction:column;gap:16px;flex-shrink:0}.brand{font-size:20px;font-weight:800}.brand span{color:#b9a7ff}.new{padding:12px;background:transparent;color:white;border:1px solid #444;border-radius:10px;text-align:left}.label{font-size:11px;color:#888;text-transform:uppercase}.history{color:#aaa;font-size:13px}.profile{margin-top:auto;border-top:1px solid #333;padding:14px 4px}.main{flex:1;min-width:0;display:flex;flex-direction:column}.top{height:56px;border-bottom:1px solid #333;display:flex;align-items:center;justify-content:space-between;padding:0 18px}.top button,.icon{background:transparent;border:0;color:white;font-size:20px}.content{flex:1;overflow:auto;display:flex;flex-direction:column;align-items:center;padding:25px 16px}.welcome{width:min(100%,760px);margin:auto 0;text-align:center}.mark{margin:0 auto 18px;width:55px;height:55px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,#a78bfa,#55c7ed);color:#171717;font-weight:900;font-size:25px}.welcome h1{font-size:32px;font-weight:600}.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left}.card{padding:15px;border:1px solid #444;border-radius:13px;background:transparent;color:white;text-align:left}.card b{display:block;margin-bottom:5px}.card span{color:#aaa;font-size:12px}.messages{width:min(100%,780px);display:flex;flex-direction:column;gap:24px;padding:18px 0 30px}.msg{display:flex;gap:12px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}.msg.user{justify-content:flex-end}.bubble{max-width:88%}.user .bubble{background:#303030;padding:11px 16px;border-radius:18px}.avatar{width:29px;height:29px;border-radius:50%;background:#8064c9;display:grid;place-items:center;flex-shrink:0}.composer-wrap{width:min(100%,780px);margin-top:auto}.notice{font-size:12px;color:#e9d9a3;background:#393323;border:1px solid #665832;border-radius:10px;padding:10px;margin-bottom:10px}.composer{display:flex;align-items:end;gap:8px;background:#303030;border:1px solid #505050;border-radius:24px;padding:9px 10px 9px 16px}.composer textarea{flex:1;min-width:0;resize:none;max-height:150px;background:transparent;color:white;border:0;outline:0;font:15px system-ui;padding:8px}.send{width:38px;height:38px;border:0;border-radius:50%;font-size:22px;background:white;color:#111}.send:disabled{opacity:.4}.fine{text-align:center;color:#888;font-size:11px;padding:9px}.mobile{display:none}
-@media(max-width:680px){.side{position:fixed;z-index:3;left:-270px;top:0;bottom:0;transition:.2s;box-shadow:8px 0 30px #0008}.side.open{left:0}.mobile{display:inline-block}.cards{grid-template-columns:1fr}.welcome h1{font-size:27px}.content{padding:15px 12px}}
-</style></head><body><div class="app">
-<aside class="side" id="side"><div class="brand">NOVA<span>✦</span></div><button class="new" id="new">＋　New chat</button><div class="label">Recent</div><div class="history" id="history">Your chats will appear here.</div><div class="profile">◉　NOVA AI<br><small style="color:#888">Assistant preview</small></div></aside>
-<section class="main"><header class="top"><div><button class="mobile" id="menu">☰　</button>NOVA <small style="color:#999">· V2</small></div><button class="icon" id="clear">⋯</button></header>
-<div class="content" id="content"><section class="welcome" id="welcome"><div class="mark">N</div><h1>What can I help with?</h1><div class="cards"><button class="card" data-p="Teach me HTML from the beginning"><b>⌘ Learn something</b><span>Understand a topic step by step</span></button><button class="card" data-p="Give me three creative website ideas"><b>✧ Get inspired</b><span>Explore fresh ideas</span></button><button class="card" data-p="Help me write a short sci-fi story"><b>▤ Write something</b><span>Stories, captions and drafts</span></button><button class="card" data-p="Help me plan a productive day"><b>◷ Make a plan</b><span>Organize your tasks</span></button></div></section><div class="messages" id="messages"></div>
-<div class="composer-wrap"><div class="notice">Demo mode: this is a ChatGPT-style interface, not connected to a live AI model yet. Don't enter passwords or private information.</div><form class="composer" id="form"><textarea id="input" rows="1" placeholder="Message NOVA..."></textarea><button class="send" id="send" disabled>↑</button></form><div class="fine">NOVA can make mistakes. Check important information.</div></div></div></section></div>
+*{box-sizing:border-box}
+body{margin:0;background:#212121;color:#f5f5f5;font:15px system-ui,Arial;height:100dvh;overflow:hidden}
+.app{display:flex;height:100%}
+.side{width:255px;background:#171717;padding:15px;display:flex;flex-direction:column;gap:16px;flex-shrink:0}
+.brand{font-size:20px;font-weight:800}.brand span{color:#b9a7ff}
+.new{padding:12px;background:transparent;color:white;border:1px solid #444;border-radius:10px;text-align:left;cursor:pointer}
+.label{font-size:11px;color:#888;text-transform:uppercase}
+.history{color:#aaa;font-size:13px;overflow:auto;display:flex;flex-direction:column;gap:5px}
+.chat-item{padding:10px;border:0;border-radius:9px;background:transparent;color:#ddd;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.chat-item.active,.chat-item:hover{background:#303030}
+.profile{margin-top:auto;border-top:1px solid #333;padding:14px 4px}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{height:56px;border-bottom:1px solid #333;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.top button,.icon{background:transparent;border:0;color:white;font-size:20px;cursor:pointer}
+.content{flex:1;overflow:auto;display:flex;flex-direction:column;align-items:center;padding:25px 16px}
+.welcome{width:min(100%,760px);margin:auto 0;text-align:center}
+.mark{margin:0 auto 18px;width:55px;height:55px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,#a78bfa,#55c7ed);color:#171717;font-weight:900;font-size:25px}
+.welcome h1{font-size:32px;font-weight:600}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left}
+.card{padding:15px;border:1px solid #444;border-radius:13px;background:transparent;color:white;text-align:left;cursor:pointer}
+.card b{display:block;margin-bottom:5px}.card span{color:#aaa;font-size:12px}
+.messages{width:min(100%,780px);display:flex;flex-direction:column;gap:24px;padding:18px 0 30px}
+.msg{display:flex;gap:12px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.user{justify-content:flex-end}
+.bubble{max-width:88%}
+.user .bubble{background:#303030;padding:11px 16px;border-radius:18px}
+.avatar{width:29px;height:29px;border-radius:50%;background:#8064c9;display:grid;place-items:center;flex-shrink:0}
+.composer-wrap{width:min(100%,780px);margin-top:auto}
+.notice{font-size:12px;color:#e9d9a3;background:#393323;border:1px solid #665832;border-radius:10px;padding:10px;margin-bottom:10px}
+.composer{display:flex;align-items:end;gap:8px;background:#303030;border:1px solid #505050;border-radius:24px;padding:9px 10px 9px 16px}
+.composer textarea{flex:1;min-width:0;resize:none;max-height:150px;background:transparent;color:white;border:0;outline:0;font:15px system-ui;padding:8px}
+.send{width:38px;height:38px;border:0;border-radius:50%;font-size:22px;background:white;color:#111;cursor:pointer}
+.send:disabled{opacity:.4}
+.fine{text-align:center;color:#888;font-size:11px;padding:9px}
+.mobile{display:none}
+@media(max-width:680px){
+.side{position:fixed;z-index:3;left:-270px;top:0;bottom:0;transition:.2s;box-shadow:8px 0 30px #0008}
+.side.open{left:0}.mobile{display:inline-block}
+.cards{grid-template-columns:1fr}.welcome h1{font-size:27px}
+.content{padding:15px 12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side" id="side">
+<div class="brand">NOVA<span>✦</span></div>
+<button class="new" id="new">＋　New chat</button>
+<div class="label">Recent chats</div>
+<div class="history" id="history">Your chats will appear here.</div>
+<div class="profile">◉　NOVA AI<br><small style="color:#888">Assistant preview V3.1</small></div>
+</aside>
+<section class="main">
+<header class="top">
+<div><button class="mobile" id="menu">☰　</button>NOVA <small style="color:#999">· V3.1</small></div>
+<button class="icon" id="clear" aria-label="New chat">＋</button>
+</header>
+<div class="content" id="content">
+<section class="welcome" id="welcome">
+<div class="mark">N</div>
+<h1>What can I help with?</h1>
+<div class="cards">
+<button class="card" data-p="Teach me HTML from the beginning"><b>⌘ Learn something</b><span>Understand a topic step by step</span></button>
+<button class="card" data-p="Give me three creative website ideas"><b>✧ Get inspired</b><span>Explore fresh ideas</span></button>
+<button class="card" data-p="Help me write a short sci-fi story"><b>▤ Write something</b><span>Stories, captions and drafts</span></button>
+<button class="card" data-p="Help me plan a productive day"><b>◷ Make a plan</b><span>Organize your tasks</span></button>
+</div>
+</section>
+<div class="messages" id="messages"></div>
+<div class="composer-wrap">
+<div class="notice">Demo mode: NOVA is not connected to a live AI model yet. Don't enter passwords or private information.</div>
+<form class="composer" id="form">
+<textarea id="input" rows="1" placeholder="Message NOVA..."></textarea>
+<button class="send" id="send" disabled>↑</button>
+</form>
+<div class="fine">NOVA can make mistakes. Check important information.</div>
+</div>
+</div>
+</section>
+</div>
 <script>
-const $=id=>document.getElementById(id),msgs=$('messages'),input=$('input');let first=true;
-function add(t,r){let row=document.createElement('div');row.className='msg '+r;if(r==='assistant'){let a=document.createElement('div');a.className='avatar';a.textContent='N';row.append(a)}let b=document.createElement('div');b.className='bubble';b.textContent=t;row.append(b);msgs.append(row);$('content').scrollTop=$('content').scrollHeight}
-function answer(t){let q=t.toLowerCase();if(/hello|hi|hey/.test(q))return 'Hey! Welcome to NOVA. What would you like to work on today?';if(/html|css|javascript|code|coding|website/.test(q))return 'I can help you plan and write HTML, CSS and JavaScript. Tell me what you are building and we can work through it step by step.';if(/idea|creative/.test(q))return 'Here are three ideas:\n\n1. A study dashboard\n2. A mini quiz game\n3. A personal portfolio\n\nWhich one should we explore?';if(/story|write/.test(q))return 'Sure! Tell me the topic, tone and length you want, and I can help draft it.';if(/plan|day|task/.test(q))return 'Try this plan:\n\n1. Choose one priority.\n2. Break it into small steps.\n3. Focus on one step at a time.\n4. Take breaks and review your progress.';return 'NOVA is currently using sample replies. To answer open-ended questions like ChatGPT, we need to connect an AI service through a secure backend. The secret API key must never be placed in this public website.'}
-function send(t){t=t.trim();if(!t)return;$('welcome').style.display='none';add(t,'user');input.value='';input.style.height='auto';$('send').disabled=true;let wait=document.createElement('div');wait.className='msg assistant';wait.textContent='NOVA is thinking…';msgs.append(wait);setTimeout(()=>{wait.remove();add(answer(t),'assistant')},500)}
-$('form').addEventListener('submit',e=>{e.preventDefault();send(input.value)});input.addEventListener('input',()=>{$('send').disabled=!input.value.trim();input.style.height='auto';input.style.height=Math.min(input.scrollHeight,150)+'px'});input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send(input.value)}});document.querySelectorAll('[data-p]').forEach(x=>x.addEventListener('click',()=>send(x.dataset.p)));
-$('new').onclick=()=>{msgs.innerHTML='';$('welcome').style.display='block';input.value='';$('side').classList.remove('open')};$('clear').onclick=()=>{$('new').click()};$('menu').onclick=()=>$('side').classList.toggle('open');
-</script></body></html>
+const $ = id => document.getElementById(id);
+const msgs = $('messages');
+const input = $('input');
+const STORAGE_KEY = 'nova_ai_v3_multi_chats';
+
+let chats = [];
+let currentId = null;
+
+function saveChats() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(chats));
+  } catch (error) {
+    alert('Could not save chats. Browser storage may be full.');
+  }
+}
+
+function currentChat() {
+  return chats.find(chat => chat.id === currentId);
+}
+
+function renderHistory() {
+  const list = $('history');
+  list.innerHTML = '';
+
+  if (!chats.length) {
+    list.textContent = 'Your chats will appear here.';
+    return;
+  }
+
+  chats.forEach(chat => {
+    const button = document.createElement('button');
+    button.className = 'chat-item' + (chat.id === currentId ? ' active' : '');
+    button.textContent = chat.title || 'New chat';
+    button.title = chat.title || 'New chat';
+    button.addEventListener('click', () => openChat(chat.id));
+    list.append(button);
+  });
+}
+
+function addMessage(text, role) {
+  const row = document.createElement('div');
+  row.className = 'msg ' + role;
+
+  if (role === 'assistant') {
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = 'N';
+    row.append(avatar);
+  }
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = text;
+  row.append(bubble);
+  msgs.append(row);
+  $('content').scrollTop = $('content').scrollHeight;
+}
+
+function openChat(id) {
+  const chat = chats.find(item => item.id === id);
+  if (!chat) return;
+
+  currentId = id;
+  msgs.innerHTML = '';
+  $('welcome').style.display = chat.messages.length ? 'none' : 'block';
+
+  chat.messages.forEach(message => addMessage(message.text, message.role));
+  renderHistory();
+  $('side').classList.remove('open');
+}
+
+function newChat() {
+  const chat = {
+    id: Date.now().toString() + Math.random().toString(36).slice(2),
+    title: 'New chat',
+    messages: [],
+    updatedAt: Date.now()
+  };
+
+  chats.unshift(chat);
+  currentId = chat.id;
+  msgs.innerHTML = '';
+  $('welcome').style.display = 'block';
+  input.value = '';
+  input.style.height = 'auto';
+  $('send').disabled = true;
+  saveChats();
+  renderHistory();
+  $('side').classList.remove('open');
+}
+
+function answer(text) {
+  const q = text.toLowerCase();
+
+  if (/hello|hi|hey/.test(q))
+    return 'Hey! Welcome to NOVA. What would you like to work on today?';
+
+  if (/html|css|javascript|code|coding|website/.test(q))
+    return 'I can help you plan and write HTML, CSS and JavaScript. Tell me what you are building and we can work through it step by step.';
+
+  if (/idea|creative/.test(q))
+    return 'Here are three ideas:\n\n1. A study dashboard\n2. A mini quiz game\n3. A personal portfolio\n\nWhich one should we explore?';
+
+  if (/story|write/.test(q))
+    return 'Sure! Tell me the topic, tone and length you want, and I can help draft it.';
+
+  if (/plan|day|task/.test(q))
+    return 'Try this plan:\n\n1. Choose one priority.\n2. Break it into small steps.\n3. Focus on one step at a time.\n4. Take breaks and review your progress.';
+
+  return 'NOVA is currently using sample replies. To answer open-ended questions like ChatGPT, we need to connect an AI service through a secure backend. The secret API key must never be placed in this public website.';
+}
+
+function sendMessage(text) {
+  text = text.trim();
+  if (!text) return;
+
+  let chat = currentChat();
+  if (!chat) {
+    newChat();
+    chat = currentChat();
+  }
+
+  $('welcome').style.display = 'none';
+  chat.messages.push({ role: 'user', text });
+
+  if (chat.messages.length === 1) {
+    chat.title = text.length > 28 ? text.slice(0, 28) + '…' : text;
+  }
+
+  chat.updatedAt = Date.now();
+  addMessage(text, 'user');
+  input.value = '';
+  input.style.height = 'auto';
+  $('send').disabled = true;
+  saveChats();
+  renderHistory();
+
+  const waiting = document.createElement('div');
+  waiting.className = 'msg assistant';
+  waiting.textContent = 'NOVA is thinking…';
+  msgs.append(wait);
+
+  setTimeout(() => {
+    waiting.remove();
+    const reply = answer(text);
+    chat.messages.push({ role: 'assistant', text: reply });
+    chat.updatedAt = Date.now();
+    addMessage(reply, 'assistant');
+    saveChats();
+    renderHistory();
+  }, 500);
+}
+
+$('form').addEventListener('submit', event => {
+  event.preventDefault();
+  sendMessage(input.value);
+});
+
+input.addEventListener('input', () => {
+  $('send').disabled = !input.value.trim();
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 150) + 'px';
+});
+
+input.addEventListener('keydown', event => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage(input.value);
+  }
+});
+
+document.querySelectorAll('[data-p]').forEach(button => {
+  button.addEventListener('click', () => sendMessage(button.dataset.p));
+});
+
+$('new').addEventListener('click', newChat);
+$('clear').addEventListener('click', newChat);
+$('menu').addEventListener('click', () => $('side').classList.toggle('open'));
+
+function loadChats() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    chats = Array.isArray(saved) ? saved : [];
+  } catch (error) {
+    chats = [];
+  }
+
+  chats = chats.filter(chat =>
+    chat && typeof chat.id === 'string' &&
+    Array.isArray(chat.messages)
+  );
+
+  chats.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  renderHistory();
+
+  if (chats.length) {
+    openChat(chats[0].id);
+  } else {
+    newChat();
+  }
+}
+
+loadChats();
+</script>
+</body>
+</html>
